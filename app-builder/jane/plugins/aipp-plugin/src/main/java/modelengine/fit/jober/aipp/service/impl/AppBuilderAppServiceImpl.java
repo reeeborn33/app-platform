@@ -529,6 +529,9 @@ public class AppBuilderAppServiceImpl
     @Fitable(id = "default")
     public Rsp<RangedResultSet<AppBuilderAppMetadataDto>> list(AppQueryCondition cond,
             OperationContext context, long offset, int limit) {
+        if (cond == null) {
+            cond = new AppQueryCondition();
+        }
         cond.setCreateBy(context.getOperator());
         List<AppBuilderAppMetadataDto> result = this.appRepository.selectWithLatestApp(cond, context.getTenantId(), offset, limit)
                 .stream()
