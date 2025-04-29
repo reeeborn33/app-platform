@@ -19,6 +19,7 @@ import modelengine.fel.community.model.openai.entity.embed.OpenAiEmbeddingReques
 import modelengine.fel.community.model.openai.entity.embed.OpenAiEmbeddingResponse;
 import modelengine.fel.community.model.openai.entity.image.OpenAiImageRequest;
 import modelengine.fel.community.model.openai.entity.image.OpenAiImageResponse;
+import modelengine.fel.community.model.openai.enums.ModelProcessingState;
 import modelengine.fel.community.model.openai.util.HttpUtils;
 import modelengine.fel.core.chat.ChatMessage;
 import modelengine.fel.core.chat.ChatModel;
@@ -59,7 +60,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -169,31 +170,31 @@ public class OpenAiModel implements EmbedModel, ChatModel, ImageModel {
     }
 
     private Choir<ChatMessage> createChatStream(HttpClassicClientRequest request) {
-        AtomicBoolean reasoningFlag = new AtomicBoolean(false);
+        AtomicReference<ModelProcessingState> ModelProcessingState = new AtomicReference<>(modelengine.fel.community.model.openai.enums.ModelProcessingState.INITIAL);
         return request.<String>exchangeStream(String.class)
                 .filter(str -> !StringUtils.equals(str, "[DONE]"))
                 .map(str -> this.serializer.<OpenAiChatCompletionResponse>deserialize(str,
                         OpenAiChatCompletionResponse.class))
                 .map(response -> {
-                    return getChatMessage(response, reasoningFlag);
+                    return getChatMessage(response, ModelProcessingState);
                 });
     }
 
-    private ChatMessage getChatMessage(OpenAiChatCompletionResponse response, AtomicBoolean reasoningFlag) {
+    private ChatMessage getChatMessage(OpenAiChatCompletionResponse response, AtomicReference<ModelProcessingState> state) {
         // todo 确认toolcall是否会在推理完成之后出现
         // 适配reasoning_content格式返回的模型推理内容，模型生成内容顺序为先reasoning_content后content
         // 在第一个reasoning_content chunk之前增加<think>标签，并且在第一个content chunk之前增加</think>标签
-        if (!reasoningFlag.get() && StringUtils.isNotEmpty(response.reasoningContent().text())) {
+        if (state.get().equals(ModelProcessingState.INITIAL) && StringUtils.isNotEmpty(response.reasoningContent().text())) {
             String text = "<think>" + response.reasoningContent().text();
-            reasoningFlag.set(true);
+            state.set(ModelProcessingState.THINKING);
             return new AiMessage(text);
         }
-        if (reasoningFlag.get() && StringUtils.isNotEmpty(response.message().text())) {
+        if (state.get().equals(ModelProcessingState.THINKING) && StringUtils.isNotEmpty(response.message().text())) {
             String text = "</think>" + response.message().text();
-            reasoningFlag.set(false);
+            state.set(ModelProcessingState.RESPONDING);
             return new AiMessage(text, response.message().toolCalls());
         }
-        if (reasoningFlag.get()) {
+        if (state.get().equals(ModelProcessingState.THINKING)) {
             return response.reasoningContent();
         }
         return response.message();

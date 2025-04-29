@@ -61,13 +61,11 @@ public class OpenAiChatCompletionResponse {
             return EMPTY_RESPONSE;
         }
 
-        // 提取 content（支持 String 或其他类型）
         String content = Optional.ofNullable(contentExtractor.apply(openAiChatMessage))
                 .filter(obj -> obj instanceof String)
                 .map(obj -> (String) obj)
                 .orElse(StringUtils.EMPTY);
 
-        // 提取 toolCalls（允许传入 null 或实际提取逻辑）
         List<ToolCall> toolCalls = Optional.ofNullable(toolCallsExtractor.apply(openAiChatMessage))
                 .orElse(Collections.emptyList());
 
