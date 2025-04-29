@@ -23,6 +23,7 @@ import modelengine.fit.jade.aipp.classify.question.util.Constant;
 import modelengine.fit.jade.aipp.memory.AippMemoryFactory;
 import modelengine.fit.jade.aipp.model.dto.ModelAccessInfo;
 import modelengine.fit.jade.aipp.model.service.AippModelCenter;
+import modelengine.fit.jober.aipp.common.utils.ContentProcessUtils;
 import modelengine.fitframework.annotation.Component;
 import modelengine.fitframework.flowable.Choir;
 import modelengine.fitframework.util.IoUtils;
@@ -88,7 +89,7 @@ public class ClassifyQuestionCommandHandlerImpl implements ClassifyQuestionComma
         ChatMessages chatMessages = new ChatMessages();
         chatMessages.add(new HumanMessage(prompt));
         Choir<ChatMessage> answer = this.modelService.generate(chatMessages, chatOption);
-        String textAnswer = answer.blockAll().get(0).text();
+        String textAnswer = ContentProcessUtils.filterReasoningContent(answer.blockAll().get(0).text());
         String extractedType = "";
         Pattern pattern = Pattern.compile(TYPE_REGEX);
         Matcher matcher = pattern.matcher(textAnswer);
