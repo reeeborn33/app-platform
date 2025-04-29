@@ -170,13 +170,13 @@ public class OpenAiModel implements EmbedModel, ChatModel, ImageModel {
     }
 
     private Choir<ChatMessage> createChatStream(HttpClassicClientRequest request) {
-        AtomicReference<ModelProcessingState> ModelProcessingState = new AtomicReference<>(modelengine.fel.community.model.openai.enums.ModelProcessingState.INITIAL);
+        AtomicReference<ModelProcessingState> modelProcessingState = new AtomicReference<>(ModelProcessingState.INITIAL);
         return request.<String>exchangeStream(String.class)
                 .filter(str -> !StringUtils.equals(str, "[DONE]"))
                 .map(str -> this.serializer.<OpenAiChatCompletionResponse>deserialize(str,
                         OpenAiChatCompletionResponse.class))
                 .map(response -> {
-                    return getChatMessage(response, ModelProcessingState);
+                    return getChatMessage(response, modelProcessingState);
                 });
     }
 
