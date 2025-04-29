@@ -42,6 +42,10 @@
             <groupId>modelengine.jade.service</groupId>
             <artifactId>aipp-classify-question-service</artifactId>
         </dependency>
+        <dependency>
+            <groupId>modelengine.fit.jane</groupId>
+            <artifactId>aipp-service</artifactId>
+        </dependency>
 
         <!-- Third-party -->
         <dependency>
@@ -75,10 +79,6 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>modelengine.fit.jane</groupId>
-            <artifactId>aipp-service</artifactId>
         </dependency>
     </dependencies>
 

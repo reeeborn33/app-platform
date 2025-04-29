@@ -24,7 +24,7 @@ import modelengine.fit.jober.aipp.dto.model.PromptGenerateDto;
 import modelengine.fit.jober.aipp.repository.AippSystemConfigRepository;
 import modelengine.fit.jober.aipp.service.AippModelService;
 import modelengine.fitframework.annotation.Component;
-import modelengine.fitframework.exception.FitException;
+import modelengine.fitframework.exception.ClientException;
 import modelengine.fitframework.flowable.Choir;
 import modelengine.fitframework.util.MapBuilder;
 import modelengine.fitframework.util.StringUtils;
@@ -89,8 +89,12 @@ public class AippModelServiceImpl implements AippModelService {
         String prompt = new DefaultStringTemplate(template).render(values);
         ModelAccessInfo modelAccessInfo = this.aippModelCenter.getDefaultModel(AippConst.CHAT_MODEL_TYPE, context);
         try {
-            return ContentProcessUtils.filterReasoningContent(this.chat(modelAccessInfo.getServiceName(), modelAccessInfo.getTag(), 0.3, prompt));
-        } catch (FitException e) {
+            return ContentProcessUtils.filterReasoningContent(this.chat(modelAccessInfo.getServiceName(),
+                    modelAccessInfo.getTag(),
+                    0.3,
+                    prompt));
+        } catch (ClientException e) {
+            // 模型生成内容超时的情况下，提醒用户更换默认模型
             log.error("Failed to generate prompt.", e);
             throw new AippException(AippErrCode.GENERATE_CONTENT_FAILED, "prompt", e.getMessage());
         }

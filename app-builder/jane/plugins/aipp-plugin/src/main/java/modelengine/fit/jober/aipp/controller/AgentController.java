@@ -21,6 +21,7 @@ import modelengine.fit.jober.aipp.dto.AgentCreateInfoDto;
 import modelengine.fit.jober.aipp.entity.AgentInfoEntity;
 import modelengine.fit.jober.aipp.service.AgentInfoGenerateService;
 import modelengine.fitframework.annotation.Component;
+import modelengine.fitframework.exception.ClientException;
 import modelengine.fitframework.log.Logger;
 import modelengine.fitframework.validation.Validated;
 import modelengine.jade.service.annotations.CarverSpan;
@@ -35,6 +36,7 @@ import modelengine.jade.service.annotations.SpanAttr;
 @RequestMapping(path = "/v1/api/{tenant_id}/agent")
 public class AgentController extends AbstractController {
     private static final Logger log = Logger.get(AgentController.class);
+
     private final Authenticator authenticator;
     private final AgentInfoGenerateService agentInfoGenerateService;
 
@@ -65,13 +67,13 @@ public class AgentController extends AbstractController {
         AgentInfoEntity entity = new AgentInfoEntity();
         OperationContext context = this.contextOf(request, tenantId);
         try {
-
             entity.setName(this.agentInfoGenerateService.generateName(dto.getDescription(), context));
             entity.setGreeting(this.agentInfoGenerateService.generateGreeting(dto.getDescription(), context));
             entity.setPrompt(this.agentInfoGenerateService.generatePrompt(dto.getDescription(), context));
             entity.setTools(
                     this.agentInfoGenerateService.selectTools(dto.getDescription(), context.getOperator(), context));
-        } catch (Exception e) {
+        } catch (ClientException e) {
+            // 模型生成内容超时的情况下，提醒用户更换默认模型
             log.error("Failed to generate agent infos.", e);
             throw new AippException(AippErrCode.GENERATE_CONTENT_FAILED, "agent infos", e.getMessage());
         }
