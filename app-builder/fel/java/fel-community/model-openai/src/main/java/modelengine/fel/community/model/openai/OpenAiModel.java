@@ -181,17 +181,19 @@ public class OpenAiModel implements EmbedModel, ChatModel, ImageModel {
 
     private ChatMessage getChatMessage(OpenAiChatCompletionResponse response, AtomicBoolean reasoningFlag) {
         // todo 确认toolcall是否会在推理完成之后出现
+        // 适配reasoning_content格式返回的模型推理内容，模型生成内容顺序为先reasoning_content后content
+        // 在第一个reasoning_content chunk之前增加<think>标签，并且在第一个content chunk之前增加</think>标签
         if (!reasoningFlag.get() && StringUtils.isNotEmpty(response.reasoningContent().text())) {
             String text = "<think>" + response.reasoningContent().text();
             reasoningFlag.set(true);
-            return new AiMessage(text, null);
+            return new AiMessage(text);
         }
-        if ( reasoningFlag.get() && StringUtils.isNotEmpty(response.message().text())) {
+        if (reasoningFlag.get() && StringUtils.isNotEmpty(response.message().text())) {
             String text = "</think>" + response.message().text();
             reasoningFlag.set(false);
             return new AiMessage(text, response.message().toolCalls());
         }
-        if (StringUtils.isNotEmpty(response.reasoningContent().text())) {
+        if (reasoningFlag.get()) {
             return response.reasoningContent();
         }
         return response.message();

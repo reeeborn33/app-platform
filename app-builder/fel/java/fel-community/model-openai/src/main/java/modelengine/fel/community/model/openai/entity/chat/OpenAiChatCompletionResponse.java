@@ -46,15 +46,10 @@ public class OpenAiChatCompletionResponse {
      * @return 表示模型回复的 {@link ChatMessage}。
      */
     public ChatMessage reasoningContent() {
-        return extractMessage(OpenAiChatMessage::reasoningContent, m -> null); // toolCalls 传 null
+        // 目前认为生成reasoning content不会生成tool call
+        return extractMessage(OpenAiChatMessage::reasoningContent, m -> null);
     }
 
-    /**
-     * 通用方法，提取消息内容并构建 AiMessage
-     * @param contentExtractor 内容提取函数（如 OpenAiChatMessage::content）
-     * @param toolCallsExtractor toolCalls 提取函数
-     * @return 构建的 AiMessage，如果无数据则返回 EMPTY_RESPONSE
-     */
     private ChatMessage extractMessage(
             Function<OpenAiChatMessage, Object> contentExtractor,
             Function<OpenAiChatMessage, List<ToolCall>> toolCallsExtractor) {
