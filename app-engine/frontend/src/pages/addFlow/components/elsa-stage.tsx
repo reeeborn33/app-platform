@@ -305,6 +305,9 @@ const Stage = (props) => {
   // 数据实时保存
   const handleChange = useCallback(debounce((id) => elsaChange(id), 2000), []);
   function elsaChange(id: any) {
+    if (elsaReadOnlyRef.current) {
+      return;
+    }
     let graphChangeData = window.agent.serialize();
     currentApp.current.flowGraph.appearance = graphChangeData;
     updateAppRunningFlow(id);
