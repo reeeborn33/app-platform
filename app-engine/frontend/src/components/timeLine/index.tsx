@@ -5,7 +5,7 @@
  *--------------------------------------------------------------------------------------------*/
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Drawer, Timeline } from 'antd';
+import { Button, Drawer, Tag, Timeline } from 'antd';
 import { useParams } from 'react-router-dom';
 import { CloseOutlined } from '@ant-design/icons';
 import { Message } from '@/shared/utils/message';
@@ -62,7 +62,6 @@ const TimeLineFc = (props) => {
   };
 
   useEffect(() => {
-    console.log(open)
     if (open) {
       dispatch(setIsReadOnly(true));
       setTimeList([]);
@@ -178,17 +177,18 @@ const TimeLineFc = (props) => {
                 <div style={{ fontWeight: '700' }}>{t('currentDraft')}</div>
               </div>
             </Timeline.Item>
-            {timeList.map(timeItem => {
+            {timeList.map((timeItem, index) => {
               const isSelected = timeItem.id === selectedAppId;
+              const isLatest = index === 0;
               return (
                 <Timeline.Item
-                  color={isSelected ? 'blue' : '#000000'}
+                  color={isSelected ? '#2673e5' : 'rgb(77, 77, 77)'}
                   key={timeItem.id}
                 >
                   <div
                     className="time-line-inner"
                     style={{
-                      color: isSelected ? '#1677ff' : 'rgb(77, 77, 77)',
+                      color: isSelected ? '#2673e5' : 'rgb(77, 77, 77)',
                       backgroundColor: isSelected ? '#e6f7ff' : 'transparent',
                       borderRadius: '4px',
                       padding: '8px',
@@ -196,7 +196,23 @@ const TimeLineFc = (props) => {
                     }}
                     onClick={() => handleItemClick(timeItem)}
                   >
-                    <div style={{ fontWeight: '700' }}>{timeItem.version}</div>
+                    <div style={{ display: 'flex', alignItems: 'center', fontWeight: 700, gap: '12px' }}>
+                      <span>{timeItem.version}</span>
+                      {isLatest &&
+                        <Tag
+                          style={{
+                            borderColor: '#2673e5',
+                            color: '#2673e5',
+                            backgroundColor: 'transparent',
+                            fontWeight: 'normal',
+                            padding: '0 8px',
+                            height: '22px',
+                          }}
+                        >
+                          {t('latest')}
+                        </Tag>
+                      }
+                    </div>
                     <div style={{ margin: '8px 0' }}>{descProcess(timeItem.publishedDescription)}</div>
                     <div>{timeItem.updateBy}</div>
                     <div>{timeItem.updateAt}</div>
