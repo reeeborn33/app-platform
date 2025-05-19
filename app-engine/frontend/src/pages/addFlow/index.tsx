@@ -57,6 +57,7 @@ const AddFlow = (props) => {
   const { tenantId, appId } = useParams();
   const [evaluateType, setEvaluateType] = useState('waterFlow');
   const readOnly = useAppSelector((state) => state.chatCommonStore.readOnly);
+  const preview = useAppSelector((state) => state.commonStore.isReadOnly);
   const appRef = useRef<any>(null);
   const flowIdRef = useRef<any>(null);
   const elsaRunningCtl = useRef<any>(null);
@@ -165,22 +166,24 @@ const AddFlow = (props) => {
         {/* 左侧菜单 */}
         <div className={['content', !type ? 'content-add' : null].join(' ')}>
           {
-            showMenu ? (
-              <LeftMenu
-                menuClick={menuClick}
-                dragData={dragData}
-                setDragData={setDragData}
-                evaluateData={evaluateData}
-                setEvaluateData={setEvaluateData}
-                type={evaluateType}
-              />
-            ) : (
-                <Tooltip placement='rightTop' title={t('expandArrange')}>
-                  <div className='menu-icon' onClick={menuClick}>
-                    <ConfigFlowIcon />
-                  </div>
-                </Tooltip>
+            !preview && (
+              showMenu ? (
+                <LeftMenu
+                  menuClick={menuClick}
+                  dragData={dragData}
+                  setDragData={setDragData}
+                  evaluateData={evaluateData}
+                  setEvaluateData={setEvaluateData}
+                  type={evaluateType}
+                />
+              ) : (
+                  <Tooltip placement='rightTop' title={t('expandArrange')}>
+                    <div className='menu-icon' onClick={menuClick}>
+                      <ConfigFlowIcon />
+                    </div>
+                  </Tooltip>
               )
+            )
           }
           {/* elsa编排组件 */}
           <Stage
