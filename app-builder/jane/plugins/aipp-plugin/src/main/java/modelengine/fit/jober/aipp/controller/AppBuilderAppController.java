@@ -429,7 +429,7 @@ public class AppBuilderAppController extends AbstractController {
      * 恢复应用到指定历史版本。
      *
      * @param httpRequest 表示 http 请求的 {@link HttpClassicServerRequest}。
-     * @param tenantId 表示租户 id 的 {@link String}。
+     * @param tenantId 表示租户唯一标识的 {@link String}。
      * @param appId 表示应用唯一标识的 {@link String}。
      * @param recoverAppId 表示指定历史版本唯一标识的 {@link String}。
      * @return 表示恢复后应用信息的 {@link AppBuilderAppDto}。
