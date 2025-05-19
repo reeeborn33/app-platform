@@ -129,10 +129,10 @@ public class MetaUtils {
     }
 
     /**
-     * 分页查询指定应用的已发布meta列表，按更新时间倒序。
+     * 分页查询指定应用的已发布元数据列表，按更新时间倒序。
      *
      * @param metaService 表示使用的 {@link MetaService}。
-     * @param metaId 表示指定应用id的 {@link String}。
+     * @param metaId 表示指定应用唯一标识的 {@link String}。
      * @param offset 表示偏移量的 {@code long}。
      * @param limit 表示单页最大数量的 {@code int}。
      * @param context 表示操作人上下文的 {@link OperationContext}。

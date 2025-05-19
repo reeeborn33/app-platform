@@ -982,7 +982,7 @@ public class AppBuilderAppServiceImplTest {
 
         when(this.appRepository.selectWithId(eq(currentAppId))).thenReturn(currentApp);
         when(this.appRepository.selectWithId(eq(resetAppId))).thenReturn(this.mockApp(resetAppId));
-        AppBuilderAppDto dto = this.appBuilderAppService.resetApp(currentAppId, resetAppId, new OperationContext());
+        AppBuilderAppDto dto = this.appBuilderAppService.recoverApp(currentAppId, resetAppId, new OperationContext());
 
         assertThat(dto).extracting(dto1 -> dto1.getFlowGraph().getId(),
                         dto1 -> dto1.getFlowGraph().getAppearance().get("id"),

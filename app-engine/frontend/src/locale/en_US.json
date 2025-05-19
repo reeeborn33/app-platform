@@ -958,5 +958,6 @@
   "resetSucceed": "Reset Succeed",
   "currentDraft": "Current Draft",
   "loading": "Loading",
-  "noMore": "You've reached the end"
+  "noMore": "You've reached the end",
+  "latest": "latest"
 }

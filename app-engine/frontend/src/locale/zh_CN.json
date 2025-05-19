@@ -958,5 +958,6 @@
   "resetSucceed": "恢复应用成功",
   "currentDraft": "当前草稿",
   "loading": "加载中",
-  "noMore": "已显示全部"
+  "noMore": "已显示全部",
+  "latest": "最新"
 }

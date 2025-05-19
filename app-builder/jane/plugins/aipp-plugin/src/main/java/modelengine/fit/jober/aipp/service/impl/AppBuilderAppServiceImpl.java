@@ -1310,10 +1310,9 @@ public class AppBuilderAppServiceImpl
 
     @Override
     @Transactional
-    public AppBuilderAppDto resetApp(String appId, String resetId, OperationContext context) {
+    public AppBuilderAppDto recoverApp(String appId, String resetId, OperationContext context) {
         AppBuilderApp resetApp = this.appFactory.create(resetId);
         AppBuilderApp currentApp = this.appFactory.create(appId);
-        // 更新graph和form property，需更新form property的app id以及graph的id、title
         List<AppBuilderFormProperty> resetFormProperties = resetApp.getFormProperties();
         List<AppBuilderFormProperty> currentFormProperties = currentApp.getFormProperties();
         Map<String, AppBuilderFormProperty> currentPropMap = currentFormProperties.stream()

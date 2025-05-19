@@ -23,7 +23,6 @@ import modelengine.fit.jober.aipp.dto.export.AppExportDto;
 import modelengine.fit.jober.aipp.dto.template.TemplateAppCreateDto;
 import modelengine.fit.jober.aipp.dto.template.TemplateInfoDto;
 import modelengine.fit.jober.common.RangedResultSet;
-import modelengine.fit.http.server.HttpClassicServerRequest;
 import modelengine.fit.jane.common.entity.OperationContext;
 import modelengine.fitframework.annotation.Genericable;
 
@@ -235,11 +234,11 @@ public interface AppBuilderAppService {
     /**
      * 恢复应用到指定历史版本。
      *
-     * @param appId 表示应用 id 的 {@link String}。
-     * @param resetId 表示指定历史版本 id 的 {@link String}。
+     * @param appId 表示应用唯一标识的 {@link String}。
+     * @param resetId 表示指定历史版本唯一标识的 {@link String}。
      * @param context 表示接口操作上下文的 {@link OperationContext}。
      * @return 表示恢复应用完成后应用详情的 {@link AppBuilderAppDto}。
      */
-    @Genericable(id = "modelengine.fit.jober.aipp.service.app.reset")
-    AppBuilderAppDto resetApp(String appId, String resetId, OperationContext context);
+    @Genericable(id = "modelengine.fit.jober.aipp.service.app.recover")
+    AppBuilderAppDto recoverApp(String appId, String resetId, OperationContext context);
 }

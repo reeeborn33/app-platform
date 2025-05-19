@@ -430,16 +430,16 @@ public class AppBuilderAppController extends AbstractController {
      *
      * @param httpRequest 表示 http 请求的 {@link HttpClassicServerRequest}。
      * @param tenantId 表示租户 id 的 {@link String}。
-     * @param appId 表示应用 id 的 {@link String}。
-     * @param resetAppId 表示指定历史版本 id 的 {@link String}。
+     * @param appId 表示应用唯一标识的 {@link String}。
+     * @param recoverAppId 表示指定历史版本唯一标识的 {@link String}。
      * @return 表示恢复后应用信息的 {@link AppBuilderAppDto}。
      */
-    @CarverSpan(value = "operation.appBuilderApp.resetApp")
-    @PostMapping(path = "/reset/{app_id}")
-    public Rsp<AppBuilderAppDto> resetApp(HttpClassicServerRequest httpRequest,
+    @CarverSpan(value = "operation.appBuilderApp.recoverApp")
+    @PostMapping(path = "/{app_id}/recover")
+    public Rsp<AppBuilderAppDto> recoverApp(HttpClassicServerRequest httpRequest,
             @PathVariable("tenant_id") String tenantId, @PathVariable("app_id") String appId,
-            @RequestBody String resetAppId) {
-        return Rsp.ok(this.appService.resetApp(appId, resetAppId, contextOf(httpRequest, tenantId)));
+            @RequestBody String recoverAppId) {
+        return Rsp.ok(this.appService.recoverApp(appId, recoverAppId, contextOf(httpRequest, tenantId)));
     }
 
     private AppQueryCondition buildAppQueryCondition(AppQueryCondition cond, String type) {

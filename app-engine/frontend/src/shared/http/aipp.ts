@@ -222,7 +222,7 @@ export function templateCreateAipp(tenantId, params) {
 export function getApiDocument() {
   return get(`${AIPP_URL}/document`);
 }
-// reset应用到某个发布版本
+// 恢复应用到某个发布版本
 export function resetApp(tenantId, appId, params, headers) {
-  return post(`${AIPP_URL}/${tenantId}/app/reset/${appId}`, params, headers);
+  return post(`${AIPP_URL}/${tenantId}/app/${appId}/recover`, params, headers);
 }
