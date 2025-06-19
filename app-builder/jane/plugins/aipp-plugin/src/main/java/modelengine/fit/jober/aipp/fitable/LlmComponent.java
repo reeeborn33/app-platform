@@ -367,7 +367,7 @@ public class LlmComponent implements FlowableService, FlowCallbackService, FlowE
         // 如果节点配置为输出到聊天，模型回复内容需要持久化
         boolean enableLog = checkEnableLog(businessData);
         if (enableLog) {
-            this.aippLogService.insertLogWithoutSend(AippInstLogType.MSG.name(),
+            this.aippLogService.insertLog(AippInstLogType.MSG.name(),
                     AippLogData.builder().msg(answer).build(),
                     businessData);
         }
@@ -545,10 +545,12 @@ public class LlmComponent implements FlowableService, FlowCallbackService, FlowE
         }
     }
 
-    public static Boolean checkEnableLog(Map<String, Object> businessData) {
-        return Objects.isNull(businessData.get(AippConst.BS_LLM_ENABLE_LOG))
-                ? true
-                : ObjectUtils.cast(businessData.get(AippConst.BS_LLM_ENABLE_LOG));
+    public static boolean checkEnableLog(Map<String, Object> businessData) {
+        Object value = businessData.get(AippConst.BS_LLM_ENABLE_LOG);
+        if (value == null) {
+            return true;
+        }
+        return Boolean.parseBoolean(value.toString());
     }
 
     static class StreamMsgSender {

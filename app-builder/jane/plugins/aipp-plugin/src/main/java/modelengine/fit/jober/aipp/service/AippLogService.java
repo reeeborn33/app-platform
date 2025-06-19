@@ -93,7 +93,7 @@ public interface AippLogService {
      * @param businessData 业务数据
      * @return 返回插入的日志id
      */
-    String insertLog(String logType, AippLogData logData, Map<String, Object> businessData);
+    String insertLogWithInterception(String logType, AippLogData logData, Map<String, Object> businessData);
 
     /**
      * 插入ERROR类型的历史记录
@@ -193,5 +193,5 @@ public interface AippLogService {
      * @param logData 表示日志主体数据的 {@link AippLogData} 实例。
      * @param businessData 表示业务数据的 {@link Map}{@code <}{@link String}{@code , }{@link Object}{@code >}。
      */
-    void insertLogWithoutSend(String logType, AippLogData logData, Map<String, Object> businessData);
+    void insertLog(String logType, AippLogData logData, Map<String, Object> businessData);
 }
