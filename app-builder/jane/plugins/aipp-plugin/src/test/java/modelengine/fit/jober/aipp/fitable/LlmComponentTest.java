@@ -325,7 +325,7 @@ public class LlmComponentTest {
                 serializer,
                 aippModelCenter,
                 promptBuilderChain,
-                this.appTaskInstanceService);
+                this.appTaskInstanceService, null);
 
         // mock
         CountDownLatch countDownLatch = mockFailAsyncJob(flowInstanceService);
@@ -353,7 +353,7 @@ public class LlmComponentTest {
                 serializer,
                 aippModelCenter,
                 promptBuilderChain,
-                this.appTaskInstanceService);
+                this.appTaskInstanceService, null);
 
         // mock
         CountDownLatch countDownLatch = mockResumeFlow(flowInstanceService);
@@ -399,7 +399,7 @@ public class LlmComponentTest {
                 serializer,
                 aippModelCenter,
                 promptBuilderChain,
-                this.appTaskInstanceService);
+                this.appTaskInstanceService, null);
 
         // mock
         CountDownLatch countDownLatch = mockResumeFlow(flowInstanceService);
@@ -522,7 +522,7 @@ public class LlmComponentTest {
                 serializer,
                 aippModelCenter,
                 promptBuilderChain,
-                this.appTaskInstanceService);
+                this.appTaskInstanceService, null);
     }
 
     private void prepareModel() {
